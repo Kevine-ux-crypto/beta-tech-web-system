@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Registration – Beta Tech Solutions</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 0; margin: 0; }
+    .form-container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 450px; }
+    h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+    input, select, textarea { width: 100%; padding: 10px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    textarea { height: 100px; resize: vertical; }
+    button { width: 100%; padding: 12px; background: #e67e22; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #ca6f1e; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>📦 Product Registration</h2>
+    <form action="#" method="POST">
+      <label for="product-name">Product Name</label>
+      <input type="text" id="product-name" name="product_name" placeholder="Enter product name" required>
+
+      <label for="product-code">Product Code / SKU</label>
+      <input type="text" id="product-code" name="product_code" placeholder="e.g. BTS-001" required>
+
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="">-- Select Category --</option>
+        <option>Electronics</option>
+        <option>Software</option>
+        <option>Hardware</option>
+        <option>Accessories</option>
+        <option>Other</option>
+      </select>
+
+      <label for="price">Price (RWF)</label>
+      <input type="number" id="price" name="price" placeholder="e.g. 50000" min="0" required>
+
+      <label for="quantity">Quantity in Stock</label>
+      <input type="number" id="quantity" name="quantity" placeholder="e.g. 100" min="0" required>
+
+      <label for="description">Product Description</label>
+      <textarea id="description" name="description" placeholder="Brief product description..."></textarea>
+
+      <button type="submit">Register Product</button>
+    </form>
+  </div>
+</body>
+</html>
