@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Login – Beta Tech Solutions</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; }
+    .container { max-width: 580px; margin: auto; }
+    h1 { text-align: center; color: #2c3e50; margin-bottom: 8px; font-size: 22px; }
+    .subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 28px; }
+    .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 28px; }
+    .card h2 { color: #2c3e50; margin-bottom: 20px; font-size: 17px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; color: #444; }
+    input { width: 100%; padding: 9px 11px; margin-bottom: 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .submit-btn { width: 100%; padding: 11px; background: #3498db; color: white; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .submit-btn:hover { background: #2980b9; }
+    .success { display: none; margin-top: 12px; padding: 10px 14px; background: #d4edda; color: #155724; border-radius: 6px; font-size: 14px; }
+    .data-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .data-header h2 { font-size: 17px; color: #2c3e50; }
+    .count-badge { background: #3498db; color: white; padding: 3px 12px; border-radius: 20px; font-size: 13px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 400px; }
+    thead tr { background: #3498db; }
+    th { color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; color: #333; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f4f9ff; }
+    .no-data { text-align: center; color: #aaa; padding: 30px; font-size: 14px; }
+    .clear-btn { padding: 5px 14px; background: transparent; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; color: #888; cursor: pointer; }
+    .clear-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+    .note { font-size: 12px; color: #aaa; margin-top: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🏢 Beta Tech Solutions</h1>
+  <p class="subtitle">Web-Based Management System</p>
+
+  <div class="card">
+    <h2>🔐 User Login Form</h2>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="Enter your email">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password">
+    <button class="submit-btn" onclick="submitForm()">Login</button>
+    <div class="success" id="success-msg">✅ Login recorded successfully!</div>
+    <p class="note">⚠️ For demo purposes, passwords are shown masked in the table below.</p>
+  </div>
+
+  <div class="card">
+    <div class="data-header">
+      <h2>📋 Login Attempts</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="count-badge" id="count-badge">0 entries</span>
+        <button class="clear-btn" onclick="clearAll()">Clear All</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Email</th><th>Password</th><th>Time</th></tr></thead>
+        <tbody id="table-body">
+          <tr><td colspan="4" class="no-data">No login attempts yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  let submissions = [];
+
+  function submitForm() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    if (!email || !password) { alert('Please fill in all fields.'); return; }
+
+    submissions.push({ email, password: '••••••', time: new Date().toLocaleTimeString() });
+
+    document.getElementById('email').value    = '';
+    document.getElementById('password').value = '';
+
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+    updateTable();
+  }
+
+  function updateTable() {
+    const tbody = document.getElementById('table-body');
+    document.getElementById('count-badge').textContent = submissions.length + (submissions.length === 1 ? ' entry' : ' entries');
+    if (!submissions.length) { tbody.innerHTML = '<tr><td colspan="4" class="no-data">No login attempts yet.</td></tr>'; return; }
+    tbody.innerHTML = submissions.map((s, i) => `<tr><td>${i+1}</td><td>${s.email}</td><td>${s.password}</td><td>${s.time}</td></tr>`).join('');
+  }
+
+  function clearAll() {
+    if (!submissions.length) return;
+    if (confirm('Clear all login records?')) { submissions = []; updateTable(); }
+  }
+</script>
+</body>
+</html>
