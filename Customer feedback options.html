@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Feedback – Beta Tech Solutions</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; }
+    .container { max-width: 600px; margin: auto; }
+    h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 22px; }
+
+    /* ── FORM ── */
+    .card { background: white; padding: 30px; border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 30px; }
+    .card h2 { color: #2c3e50; margin-bottom: 20px; font-size: 18px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold;
+            font-size: 13px; color: #444; }
+    input, select, textarea {
+      width: 100%; padding: 9px 11px; margin-bottom: 14px;
+      border: 1px solid #ccc; border-radius: 6px; font-size: 14px;
+      font-family: Arial, sans-serif; }
+    textarea { height: 90px; resize: vertical; }
+    .rating-row { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
+    .rating-row label { font-weight: normal; font-size: 15px; display: flex;
+                        align-items: center; gap: 4px; cursor: pointer; }
+    .submit-btn {
+      width: 100%; padding: 11px; background: #8e44ad; color: white;
+      border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .submit-btn:hover { background: #7d3c98; }
+    .success {
+      display: none; margin-top: 12px; padding: 10px 14px;
+      background: #d4edda; color: #155724; border-radius: 6px; font-size: 14px; }
+
+    /* ── DATA TABLE ── */
+    .data-card { background: white; padding: 30px; border-radius: 10px;
+                 box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .data-header { display: flex; justify-content: space-between;
+                   align-items: center; margin-bottom: 16px; }
+    .data-header h2 { font-size: 17px; color: #2c3e50; }
+    .count-badge {
+      background: #8e44ad; color: white; padding: 3px 12px;
+      border-radius: 20px; font-size: 13px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+    thead tr { background: #8e44ad; }
+    th { color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; color: #333; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #faf8fc; }
+    .no-data { text-align: center; color: #aaa; padding: 30px; font-size: 14px; }
+    .clear-btn {
+      padding: 5px 14px; background: transparent; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 12px; color: #888; cursor: pointer; }
+    .clear-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🏢 Beta Tech Solutions</h1>
+
+  <!-- FORM SECTION -->
+  <div class="card">
+    <h2>💬 Customer Feedback Form</h2>
+
+    <label for="cust-name">Full Name</label>
+    <input type="text" id="cust-name" placeholder="Enter your full name">
+
+    <label for="cust-email">Email Address</label>
+    <input type="email" id="cust-email" placeholder="Enter your email">
+
+    <label for="cust-phone">Phone Number</label>
+    <input type="tel" id="cust-phone" placeholder="+250 700 000 000">
+
+    <label for="service">Service Used</label>
+    <select id="service">
+      <option value="">-- Select a Service --</option>
+      <option>Web Development</option>
+      <option>IT Support</option>
+      <option>Consulting</option>
+      <option>Training</option>
+    </select>
+
+    <label>Overall Rating</label>
+    <div class="rating-row">
+      <label><input type="radio" name="rating" value="1"> 1 ⭐</label>
+      <label><input type="radio" name="rating" value="2"> 2 ⭐⭐</label>
+      <label><input type="radio" name="rating" value="3"> 3 ⭐⭐⭐</label>
+      <label><input type="radio" name="rating" value="4"> 4 ⭐⭐⭐⭐</label>
+      <label><input type="radio" name="rating" value="5"> 5 ⭐⭐⭐⭐⭐</label>
+    </div>
+
+    <label for="comments">Your Comments</label>
+    <textarea id="comments" placeholder="Tell us about your experience with our service..."></textarea>
+
+    <button class="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
+    <div class="success" id="success-msg">✅ Thank you! Your feedback has been recorded.</div>
+  </div>
+
+  <!-- DATA TABLE SECTION -->
+  <div class="data-card">
+    <div class="data-header">
+      <h2>📋 Submitted Feedback</h2>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="count-badge" id="count-badge">0 entries</span>
+        <button class="clear-btn" onclick="clearAll()">Clear All</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Service</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="8" class="no-data">No feedback submitted yet. Be the first!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Array that stores all submitted entries
+  let submissions = [];
+
+  function submitFeedback() {
+    // Collect all values from the form
+    const name     = document.getElementById('cust-name').value.trim();
+    const email    = document.getElementById('cust-email').value.trim();
+    const phone    = document.getElementById('cust-phone').value.trim();
+    const service  = document.getElementById('service').value;
+    const rating   = document.querySelector('input[name="rating"]:checked');
+    const comments = document.getElementById('comments').value.trim();
+
+    // Validate — make sure nothing is empty
+    if (!name || !email || !service || !rating || !comments) {
+      alert('Please fill in all required fields before submitting.');
+      return;
+    }
+
+    // Build the entry object
+    const entry = {
+      name:    name,
+      email:   email,
+      phone:   phone || 'N/A',
+      service: service,
+      rating:  '⭐'.repeat(parseInt(rating.value)),
+      comment: comments,
+      time:    new Date().toLocaleTimeString()
+    };
+
+    // Add to our submissions list
+    submissions.push(entry);
+
+    // Show success message
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+
+    // Reset the form fields
+    document.getElementById('cust-name').value  = '';
+    document.getElementById('cust-email').value = '';
+    document.getElementById('cust-phone').value = '';
+    document.getElementById('service').value    = '';
+    document.getElementById('comments').value   = '';
+    document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+
+    // Refresh the data table
+    updateTable();
+  }
+
+  function updateTable() {
+    const tbody = document.getElementById('table-body');
+    const badge = document.getElementById('count-badge');
+
+    // Update the count badge
+    badge.textContent = submissions.length + (submissions.length === 1 ? ' entry' : ' entries');
+
+    if (submissions.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="no-data">No feedback submitted yet.</td></tr>';
+      return;
+    }
+
+    // Build a table row for each submission
+    tbody.innerHTML = submissions.map((s, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${s.name}</td>
+        <td>${s.email}</td>
+        <td>${s.phone}</td>
+        <td>${s.service}</td>
+        <td>${s.rating}</td>
+        <td>${s.comment}</td>
+        <td>${s.time}</td>
+      </tr>
+    `).join('');
+  }
+
+  function clearAll() {
+    if (submissions.length === 0) return;
+    if (confirm('Are you sure you want to clear all submitted feedback?')) {
+      submissions = [];
+      updateTable();
+    }
+  }
+</script>
+
+</body>
+</html>
